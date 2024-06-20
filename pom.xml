@@ -13,31 +13,46 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>local-postgres-setup</name>
 	<description>local-postgres-setup</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+
 	<properties>
 		<java.version>17</java.version>
 		<kotlin.version>1.9.24</kotlin.version>
+		<surefire.version>3.2.5</surefire.version>
+		<flyway.version>10.15.0</flyway.version>
+		<pg.host>localhost</pg.host>
+		<pg.port>5432</pg.port>
 	</properties>
+
+
 	<dependencies>
+		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.7.3</version>
+		</dependency>
+
+
+
+
+		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
+			<version>${flyway.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+			<version>${flyway.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
@@ -120,6 +135,22 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>${surefire.version}</version>
+				<goals>
+					<goal>integration-test</goal>
+					<goal>verify</goal>
+				</goals>
+				<configuration>
+					<systemPropertyVariables>
+						<spring.datasource.url>
+							jdbc:postgresql://${pg.host}:${pg.port}/postgres
+						</spring.datasource.url>
+					</systemPropertyVariables>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

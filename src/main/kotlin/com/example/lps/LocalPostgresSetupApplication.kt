@@ -1,4 +1,4 @@
-package com.example.localpostgressetup
+package com.example.lps
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

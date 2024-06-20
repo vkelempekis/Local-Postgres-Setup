@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:${pg.port:5432}/postgres
     username: my_user
+    driver-class-name: org.postgresql.Driver
   flyway:
-    schemas: my_schema
     table: schema_version
     enabled: true
