@@ -103,36 +103,43 @@
 				</dependencies>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>3.0.0</version>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<configuration>
+					<images>
+						<image>
+							<name>postgres</name>
+							<run>
+								<env>
+									<POSTGRES_DB>postgres</POSTGRES_DB>
+									<POSTGRES_USER>my_user</POSTGRES_USER>
+									<POSTGRES_HOST_AUTH_METHOD>trust</POSTGRES_HOST_AUTH_METHOD>
+								</env>
+								<ports>
+									<port>5432:5432</port>
+								</ports>
+								<wait>
+									<log>database system is ready to accept connections</log>
+								</wait>
+							</run>
+						</image>
+					</images>
+				</configuration>
 				<executions>
 					<execution>
-						<id>docker-compose-up</id>
+						<id>start</id>
 						<phase>pre-integration-test</phase>
 						<goals>
-							<goal>exec</goal>
+							<goal>stop</goal>
+							<goal>start</goal>
 						</goals>
-						<configuration>
-							<executable>docker-compose</executable>
-							<arguments>
-								<argument>up</argument>
-								<argument>-d</argument>
-							</arguments>
-						</configuration>
 					</execution>
 					<execution>
-						<id>docker-compose-down</id>
+						<id>stop</id>
 						<phase>post-integration-test</phase>
 						<goals>
-							<goal>exec</goal>
+							<goal>stop</goal>
 						</goals>
-						<configuration>
-							<executable>docker-compose</executable>
-							<arguments>
-								<argument>down</argument>
-							</arguments>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
