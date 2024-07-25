@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.*
 import java.sql.*
+import java.util.*
 
 @Repository
 class PersonRepository(
@@ -27,7 +28,7 @@ class PersonRepository(
         )
     }
 
-    fun findPersonById(id: Long): Person? {
+    fun findPersonById(id: UUID): Person? {
         val sql = "SELECT * FROM Person WHERE id = :id"
         return jdbcTemplate.query(sql, mapOf("id" to id), PersonRowMapper).firstOrNull()
     }
@@ -35,7 +36,7 @@ class PersonRepository(
     private object PersonRowMapper : RowMapper<Person> {
         override fun mapRow(resultSet: ResultSet, rowNum: Int): Person = with(resultSet) {
             Person(
-                id = getInt("id"),
+                id = UUID.fromString(getString("id")),
                 name = getString("name"),
                 age = getInt("age")
             )

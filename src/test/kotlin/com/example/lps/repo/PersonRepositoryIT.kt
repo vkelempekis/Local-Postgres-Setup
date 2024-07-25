@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.*
 import org.springframework.boot.test.context.*
 import org.springframework.transaction.annotation.*
+import java.util.*
 import kotlin.test.*
 
 @SpringBootTest
@@ -16,10 +17,11 @@ class PersonRepositoryIT {
     @Test
     @Transactional // using transactional so that the data is rolled back after the test is done
     fun `insert and find by id`() {
-        val person = Person(1, "John", 35)
+        val id = UUID.randomUUID()
+        val person = Person(id, "John", 35)
         personRepository.insertPerson(person)
 
-        val result = personRepository.findPersonById(1)
+        val result = personRepository.findPersonById(id)
         assertEquals(person, result)
     }
 }
